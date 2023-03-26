@@ -1,4 +1,4 @@
 export NVHPC_CUDA_HOME="/usr/local/cuda-12.1"
-pgf77 -static-nvidia -acc=host      -o laplace_basic laplace06.for
-pgf77 -static-nvidia -acc=multicore -o laplace_multi laplace06.for
-pgf77 -static-nvidia -acc -gpu=cc75 -o laplace_tesla laplace06.for
+pgf77 -static-nvidia -acc=host      -o lbm_basic lbm-05.for
+pgf77 -static-nvidia -acc=multicore -o lbm_multi lbm-05.for
+pgf77 -static-nvidia -acc -gpu=cc75 -o lbm_tesla lbm-05.for
