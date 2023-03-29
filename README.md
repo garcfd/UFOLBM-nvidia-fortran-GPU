@@ -8,4 +8,8 @@ You will obviously need a Telsa GPU if you want to run the GPU version,
   but the other 2 versions (basic and multicore) will run fine on CPU
 There are also some instructions on what you need to download and install 
 to get nvidia (free of charge) installed on your machine. 
-Good luck and ask questions if you need to (garcfd@gmail.com)
+
+The mesh is a uniform cartesian mesh with cell size=1, so you just need 
+to supply the i,j,k coordinates where the obstacle (obs) array =1.
+Its read from obstacle.dat. The program contains an example of a sphere 
+obstacle which can be used instead if you want to uncomment that part.
