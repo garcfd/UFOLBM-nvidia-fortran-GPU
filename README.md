@@ -17,4 +17,6 @@ obstacle which can be used instead if you want to uncomment that part.
 There is also a sample obstacle.dat file here with size (500 100 200)
 So if you change the values of (ni nj nk) in the code it should work.
 https://drive.google.com/file/d/1nfoIAPawoUsyy-OZ9c6MpxROG2A4bCsC
+There is also porsche.stl file used to create the obstacle file.
+https://drive.google.com/file/d/1_Z8FRGjBYJTyB6_KUXJ2Iy8ZvH4JUBLG
 
