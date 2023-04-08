@@ -14,7 +14,7 @@ to supply the i,j,k coordinates where the obstacle (obs) array =1.
 Its read from obstacle.dat. The program contains an example of a sphere 
 obstacle which can be used instead if you want to uncomment that part.
 
-There is also a sample obstacle.dat file here with size (500 100 200) //
+There is also a sample obstacle.dat file here with size (500 100 200).
 So if you change the values of (ni nj nk) in the code it should work.
 https://drive.google.com/file/d/1nfoIAPawoUsyy-OZ9c6MpxROG2A4bCsC
 
