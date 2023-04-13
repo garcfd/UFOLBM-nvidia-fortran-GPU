@@ -1,0 +1,8 @@
+500 100 10      # im jm km
+20              # nsav
+1000            # nits
+100             # nout
+1000000.0       # Re    
+10.0            # Lref
+0.04            # uLB
+0.4             # smag const 0.1 - 0.2
