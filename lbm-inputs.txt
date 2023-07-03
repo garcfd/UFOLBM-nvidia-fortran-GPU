@@ -1,10 +1,10 @@
-400 120 10      # im jm km
-1               # nsav
-10000           # nits
+700 150 10      # im jm km
+100             # nsav
+1000            # nits
 100             # nout
 1               # tang
 2000000.0       # Re    
-30.0            # Lref
+50.0            # Lref
 0.04            # uLB
 0.15            # csmag 0.1 - 0.2
 
