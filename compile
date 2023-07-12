@@ -1,6 +1,6 @@
 export NVHPC_CUDA_HOME="/usr/local/cuda-12.1"
-  pgf77 -static-nvidia -acc=host      -o lbm-basic lbm-20.for
-  pgf77 -static-nvidia -acc=multicore -o lbm-multi lbm-20.for
-  pgf77 -static-nvidia -acc -gpu=cc75 -o lbm-tesla lbm-20.for # Nvidia Tesla T4
-# pgf77 -static-nvidia -acc -gpu=cc86 -o lbm-tesla lbm-20.for # Nvidia A10
-# gfortran -Wall -fcheck=all -fbounds-check -pedantic -fbacktrace -o lbm-gfortran lbm-20.for
+  pgf77 -static-nvidia -acc=host      -o lbm-basic lbm-22.for
+  pgf77 -static-nvidia -acc=multicore -o lbm-multi lbm-22.for
+  pgf77 -static-nvidia -acc -gpu=cc75 -o lbm-tesla lbm-22.for # Nvidia Tesla T4
+# pgf77 -static-nvidia -acc -gpu=cc86 -o lbm-tesla lbm-22.for # Nvidia A10
+# gfortran -Wall -fcheck=all -fbounds-check -pedantic -fbacktrace -o lbm-gfortran lbm-01.for
