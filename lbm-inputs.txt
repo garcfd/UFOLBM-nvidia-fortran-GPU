@@ -1,10 +1,10 @@
-700 150 10      # im jm km
-10              # nsav
-10000           # nits
+160 80 10       # im jm km
+1               # nsav
+1000            # nits
 10              # nout
 0               # tang (bounceback=0, reflection=1)
 2000000.0       # Re    
-50.0            # Lref
+80.0            # Lref
 0.04            # uLB
 0.2             # csmag 0.1 - 0.2
 
