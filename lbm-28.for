@@ -22,7 +22,6 @@ C-----------------------------------------------------------------------
         REAL,     ALLOCATABLE :: fout(:,:,:,:)
         REAL,     ALLOCATABLE :: feq(:,:,:,:)
         REAL,     ALLOCATABLE :: rho(:,:,:)
-        REAL,     ALLOCATABLE :: nut(:,:,:)
         REAL,     ALLOCATABLE :: nrm(:,:)
       end module allocated
 C-----------------------------------------------------------------------
@@ -94,13 +93,12 @@ C-----write data to screen
 
 C=====allocate
       ALLOCATE( obs(ni,nj,nk) )       ! int
-      ALLOCATE(cellnrm(ni,nj,nk) )    ! int
+      ALLOCATE( cellnrm(ni,nj,nk) )   ! int
       ALLOCATE( vel(ni,nj,nk,ndim) )  ! real
       ALLOCATE( fin(ni,nj,nk,nvec) )  ! real
       ALLOCATE(fout(ni,nj,nk,nvec) )  ! real
       ALLOCATE( feq(ni,nj,nk,nvec) )  ! real
       ALLOCATE( rho(ni,nj,nk) )       ! real
-      ALLOCATE( nut(ni,nj,nk) )       ! real
 
 C=====initialise the lbm vectors
       vec(1, :) = (/ 1,-1,-1 /) ! r3
@@ -178,7 +176,6 @@ C=====initialise weights
       feq = 0.0   ! real array
       rho = 0.0   ! real array
       vel = 0.0   ! real array
-      nut = 0.0   ! real array
 
 
 C-----original sphere geometry
@@ -321,13 +318,13 @@ C=====initial velocity field
       do j = 1,nj
       do k = 1,nk
 
-        if (obs(i,j,k).eq.1) then ! fluid
+        if (obs(i,j,k).eq.1) then ! fluid (lcd field)
           vel(i,j,k,1) = vin(1)
           vel(i,j,k,2) = vin(2)
           vel(i,j,k,3) = vin(3)
         endif
 
-        if (obs(i,j,k).le.0) then ! cutcell or solid
+        if (obs(i,j,k).le.0) then ! cutcell or solid (lcd field)
           vel(i,j,k,1) = 0.0
           vel(i,j,k,2) = 0.0
           vel(i,j,k,3) = 0.0
@@ -365,7 +362,7 @@ C=====saving vtk files
 
 !$acc data copy(obs,vel,fin,fout,feq,rho)
 !$acc data copy(vec,wt,col1,col2,col3,vin)
-!$acc data copy(nut,ref,nrmnrm66,cellnrm)
+!$acc data copy(ref,nrmnrm66,cellnrm)
 
 C=====main iterations
       do it = 1, nits
@@ -609,10 +606,6 @@ C-----rho
       write(20,10)'SCALARS rho float'
       write(20,10)'LOOKUP_TABLE default'
       write(20,*)(((rho(i,j,k),i=1,ni),j=1,nj),k=1,nk)
-C-----nut
-      write(20,10)'SCALARS nut float'
-      write(20,10)'LOOKUP_TABLE default'
-      write(20,*)(((nut(i,j,k),i=1,ni),j=1,nj),k=1,nk)
 C-----vel
       write(20,10)'VECTORS vel float'
       write(20,*)(((vel(i,j,k,1),vel(i,j,k,2),vel(i,j,k,3),
@@ -651,7 +644,7 @@ C-----output filename
       outfile = 'lbm'//string//'.vtk'
       write(6,*)"outfile = ",outfile
 
-!$acc data copy(obs,vel,rho,nut)
+!$acc data copy(obs,vel,rho)
 
       OPEN(unit=20, file=outfile, form='unformatted',
      &    access='stream',status='replace',convert="big_endian")
@@ -679,10 +672,6 @@ C-----rho
       write(20)'SCALARS rho float'//lf
       write(20)'LOOKUP_TABLE default'//lf
       write(20)(((rho(i,j,k),i=1,ni),j=1,nj),k=1,nk)
-C-----nut
-      write(20)'SCALARS nut float'//lf
-      write(20)'LOOKUP_TABLE default'//lf
-      write(20)(((nut(i,j,k),i=1,ni),j=1,nj),k=1,nk)
 C-----vel
       write(20)'VECTORS vel float'//lf
       write(20)(((vel(i,j,k,1),vel(i,j,k,2),vel(i,j,k,3),
