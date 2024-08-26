@@ -1,5 +1,5 @@
-pgf77 -static-nvidia -m64 -acc=host      -o lbm-basic lbm-28.for
-pgf77 -static-nvidia -m64 -acc=multicore -o lbm-multi lbm-28.for
-pgf77 -static-nvidia -m64 -acc -gpu=cc75 -o lbm-tesla lbm-28.for # Nvidia Tesla T4
-pgf77 -static-nvidia -m64 -acc -gpu=cc86 -o lbm-tesla lbm-28.for # Nvidia A10
-gfortran -Wall -fcheck=all -fbounds-check -pedantic -fbacktrace -o lbm-gfort lbm-28.for
+pgf77 -static-nvidia -m64 -acc=host      -o lbm-basic lbm-30.for
+pgf77 -static-nvidia -m64 -acc=multicore -o lbm-multi lbm-30.for
+pgf77 -static-nvidia -m64 -acc -gpu=cc75 -o lbm-tesla lbm-30.for # Nvidia Tesla T4
+pgf77 -static-nvidia -m64 -acc -gpu=cc86 -o lbm-tesla lbm-30.for # Nvidia A10
+gfortran -Wall -fcheck=all -fbounds-check -pedantic -fbacktrace -o lbm-gfort lbm-30.for
