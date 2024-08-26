@@ -51,11 +51,10 @@ c-----tangential flow variables
       real unew1,vnew1,wnew1
       real unew2,vnew2,wnew2
       real mag1,mag2,tweak,angle,dotp
-      real a1,a2,a3, b1,b2,b3
+      real a1,a2,a3, b1,b2,b3, c1,c2,c3
       real adb,acb1,acb2,acb3,mag_acb
-      real cc,ss,tt,tmp1,tmp2
+      real cc,ss,tt,tmp1,tmp2,dotp_max
       real m11,m22,m33,m21,m12,m31,m13,m32,m23
-      real dotp_max
       integer nn,marker
 
 C-----common
@@ -329,13 +328,13 @@ C=====initial velocity field
       do j = 1,nj
       do k = 1,nk
 
-        if (obs(i,j,k).eq.1) then ! fluid (lcd field)
+        if (obs(i,j,k).ge.0) then ! fluid (lcd field)
           vel(i,j,k,1) = vin(1)
           vel(i,j,k,2) = vin(2)
           vel(i,j,k,3) = vin(3)
         endif
 
-        if (obs(i,j,k).le.0) then ! cutcell or solid (lcd field)
+        if (obs(i,j,k).eq.-1) then ! cutcell or solid (lcd field)
           vel(i,j,k,1) = 0.0
           vel(i,j,k,2) = 0.0
           vel(i,j,k,3) = 0.0
@@ -575,23 +574,27 @@ C             geometry/rotations/conversions/angleToMatrix/index.htm
 C---------rotate each vec to find new vector
           do n = 1,nvec
 
+c-----------a = original vector
             a1 = vec(n,1)
             a2 = vec(n,2)
             a3 = vec(n,3)
 
+c-----------b = rotated vector
             b1 = m11*a1 + m12*a2 + m13*a3 
             b2 = m21*a1 + m22*a2 + m23*a3 
             b3 = m31*a1 + m32*a2 + m33*a3 
 
 C-----------find vector match for rotated vector 
-            dotp_max = 0.0
+            marker = 0
+            dotp_max = -1.0
             do nn = 1,nvec
 
-              a1 = vec(nn,1)
-              a2 = vec(nn,2)
-              a3 = vec(nn,3)
+              c1 = vec(nn,1)
+              c2 = vec(nn,2)
+              c3 = vec(nn,3)
 
-              dotp = a1*b1 + a2*b2 + a3*b3
+              dotp = b1*c1 + b2*c2 + b3*c3
+
               if (dotp.gt.dotp_max) then
                 dotp_max = dotp 
                 marker = nn
@@ -599,16 +602,34 @@ C-----------find vector match for rotated vector
  
             enddo
 
-        if (n.eq.14) fout(i,j,k,14) = fin(i,j,k,14)
-        if (n.ne.14) fout(i,j,k,marker) = fin(i,j,k,n)*wt(marker)/wt(n)
+
+            if (n.eq.14) then
+              marker = 14
+            else
+              fout(i,j,k,marker) = fin(i,j,k,n)*wt(marker)/wt(n)
+
+              if (.true.) then
+              if (dotp_max.eq.0.0) then
+                write(6,*) "error: dotp_max =",dotp_max
+                write(6,*) "at ",i,j,k,it
+                write(6,*) "nvec  ",n
+                write(6,*) "angle ",angle
+                write(6,*) "a123  ",a1,a2,a3
+                write(6,*) "b123  ",b1,b2,b3
+                write(6,*) "c123  ",c1,c2,c3
+              stop
+              endif
+              endif
+
+            endif 
 
           enddo
       
         endif  !  (wall.eq.2) tangential
 C=======end tangential code 
 
-
       endif  !  (obs.eq.0) cutcell
+
 
 
       enddo  !  i-loop
