@@ -1,8 +1,8 @@
 # nvidia-fortran-GPU-LBM-solver
 nvidia pgf77 fortran openacc gpu solver
 
-The laplace-06 program was just the start of getting something to run on GPU,
-The main program you want to use is the lbm-24.for, which is the LBM solver.
+This code was developed from the 2D python code of Jonas Latt (unige coursera).
+Mainly converting it to (D3Q27) in Fortran and making it run on nvidia GPU.
 The compiler commands are included in "compile" file, giving 3 executables.
 
 You will obviously need a Telsa GPU if you want to run the GPU version,
