@@ -1,9 +1,8 @@
-1610 262 410        # im jm km
+800 126 11          # im jm km
 1                   # nsav
 10000               # nits
 10                  # nout
-0                   # wall (bounceback=0, symmetry=1, tangential=2)
-2760000.0           # Re    
-460.0               # Lref
+1000.0              # Re    
+100.0               # Lref
 0.04                # uLB
 
