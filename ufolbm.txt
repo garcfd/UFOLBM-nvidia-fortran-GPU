@@ -1,7 +1,7 @@
 800 126 11          # im jm km
 1                   # nsav
 10000               # nits
-10                  # nout
+100                 # nout
 1000.0              # Re    
 100.0               # Lref
 0.04                # uLB

@@ -183,16 +183,19 @@ C-----original sphere geometry
 
 
 C-----set walls (if not periodic)
-      if (.true.) then
+      if (.false.) then
       do i = 1,ni
-        do k = 1,nk
+
+        do k = 1,nk ! top/bottom walls
           obs(i, 1,k) = 0 ! ymin
           obs(i,nj,k) = 0 ! ymax
         enddo
-        do j = 1,nj ! side walls
+
+        do j = 1,nj ! front/back walls
           obs(i,j, 1) = 0 ! zmin
           obs(i,j,nk) = 0 ! zmax
         enddo
+
       enddo
       endif
 
@@ -348,8 +351,8 @@ CCC     fout(i,j,k,n) = fin(i,j,k,n) - omega*(fin(i,j,k,n) - feq(i,j,k,n))
       enddo
 
 
-C     STEP7 - obstacle wall condition
-      if (obs(i,j,k).eq.0) then ! cutcell from ufocfd solver
+C     STEP7 - bounce-back obstacle wall condition
+      if (obs(i,j,k).le.0) then ! cutcell or dead
         do n = 1,nvec
           fout(i,j,k,n) = fin(i,j,k,nvec+1-n)
         enddo
@@ -386,9 +389,7 @@ C---------periodic boundaries
             if (nextk.gt.nk) nextk = 1
           endif
           
-          if ( obs(nexti,nextj,nextk).ge.0 ) then
-            fin(nexti,nextj,nextk,n) = fout(i,j,k,n)
-          endif
+          fin(nexti,nextj,nextk,n) = fout(i,j,k,n)
 
         enddo
 
