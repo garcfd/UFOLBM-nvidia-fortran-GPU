@@ -1,9 +1,0 @@
-360 160 5           # im jm km
-1                   # nsav
-1000                # nits
-20                  # nout
-2                   # wall (bounceback=0, symmetry=1, tangential=2)
-300.0               # Re    
-40.0                # Lref
-0.1                 # uLB
-
