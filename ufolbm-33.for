@@ -29,7 +29,7 @@ C-----------------------------------------------------------------------
       integer, parameter :: ndim=3, nvec=27, nrow=9
 
       integer i,j,k,n,it,nits,nsav,nout,lcd
-      integer nexti,nextj,nextk,obsmax
+      integer nexti,nextj,nextk,obsmax, full, slice
       integer vec(nvec,ndim),col1(nrow),col2(nrow),col3(nrow)
 
       real wt(nvec),vin(ndim)
@@ -46,6 +46,8 @@ C-----read input file
       read(10,*) nsav      ! max saves
       read(10,*) nits      ! max iterations
       read(10,*) nout      ! write every nout
+      read(10,*) full      ! full
+      read(10,*) slice     ! slice
       read(10,*) re        ! Re
       read(10,*) lref      ! Lref
       read(10,*) ulb       ! velocity in lattice units
@@ -73,6 +75,8 @@ C-----write data to screen
       write(6,'(1X,A,I8)') 'nsav = ',nsav
       write(6,'(1X,A,I8)') 'nits = ',nits
       write(6,'(1X,A,I8)') 'nout = ',nout
+      write(6,'(1X,A,I8)') 'full = ',full
+      write(6,'(1X,A,I8)') 'slice = ',slice
       write(6,*) 'Re    = ',Re
       write(6,*) 'Lref  = ',Lref
       write(6,*) 'uLB   = ',uLB
@@ -182,19 +186,19 @@ C-----original sphere geometry
       endif
 
 
-C-----set walls (if not periodic)
+C-----set outer boundary walls
       if (.false.) then
-      do i = 1,ni
+      do i = 10,ni
 
         do k = 1,nk ! top/bottom walls
           obs(i, 1,k) = 0 ! ymin
           obs(i,nj,k) = 0 ! ymax
         enddo
 
-        do j = 1,nj ! front/back walls
-          obs(i,j, 1) = 0 ! zmin
-          obs(i,j,nk) = 0 ! zmax
-        enddo
+c        do j = 1,nj ! front/back walls
+c          obs(i,j, 1) = 0 ! zmin
+c          obs(i,j,nk) = 0 ! zmax
+c        enddo
 
       enddo
       endif
@@ -229,16 +233,16 @@ C=====initial velocity field
       do j = 1,nj
       do k = 1,nk
 
-        if (obs(i,j,k).eq.1) then ! fluid (lcd field)
-          vel(i,j,k,1) = vin(1)
-          vel(i,j,k,2) = vin(2)
-          vel(i,j,k,3) = vin(3)
-        endif
+        vel(i,j,k,1) = vin(1)
+        vel(i,j,k,2) = vin(2)
+        vel(i,j,k,3) = vin(3)
 
-        if (obs(i,j,k).le.0) then ! cutcell or solid (lcd field)
+        if (.false.) then
+        if (obs(i,j,k).le.0) then ! cutcell or solid
           vel(i,j,k,1) = 0.0
           vel(i,j,k,2) = 0.0
           vel(i,j,k,3) = 0.0
+        endif
         endif
 
       enddo
@@ -381,12 +385,14 @@ C       STEP8 - streaming step
 
 C---------periodic boundaries
           if (.true.) then
-            if (nexti.lt.1)  nexti = ni
-            if (nextj.lt.1)  nextj = nj
-            if (nextk.lt.1)  nextk = nk
-            if (nexti.gt.ni) nexti = 1
-            if (nextj.gt.nj) nextj = 1
-            if (nextk.gt.nk) nextk = 1
+            if (nexti.lt.1)  nexti = ni ! periodic
+            if (nexti.gt.ni) nexti = 1  ! periodic
+
+            if (nextj.lt.1)  nextj = 1  ! not periodic
+            if (nextj.gt.nj) nextj = nj ! not periodic
+
+            if (nextk.lt.1)  nextk = nk ! periodic
+            if (nextk.gt.nk) nextk = 1  ! periodic
           endif
           
           fin(nexti,nextj,nextk,n) = fout(i,j,k,n)
@@ -410,8 +416,8 @@ C-----write monitor
 
       call write_vxmax()
 C     call write_ascii_vtk()
-C     call write_binary_vtk()
-      call write_binary_slice_vtk()
+      if (full.eq.1)  call write_binary_vtk()
+      if (slice.eq.1) call write_binary_slice_vtk()
 
       enddo ! nsav
 C=====end main iteration loop
